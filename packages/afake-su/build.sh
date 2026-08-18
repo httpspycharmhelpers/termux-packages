@@ -17,8 +17,22 @@ termux_step_pre_configure() {
 termux_step_make() {
     cd "$TERMUX_PKG_SRCDIR/src"
     bash build_su.sh
+    
 }
 
 termux_step_make_install() {
+    # 1. 主程序（从 src/ 目录复制）
     install -Dm700 "$TERMUX_PKG_SRCDIR/src/fakesu.elf" "$TERMUX_PREFIX/bin/fakesu"
+    
+    # 2. rish 助手（从根目录复制）
+    install -Dm700 "$TERMUX_PKG_SRCDIR/rish" "$TERMUX_PREFIX/bin/rish"
+    
+    # 3. rishq 工具（从根目录复制）
+    install -Dm700 "$TERMUX_PKG_SRCDIR/rishq" "$TERMUX_PREFIX/bin/rishq"
+    
+    # 4. rish_shizuku.dex（放到 share 目录作为数据文件）
+    install -Dm644 "$TERMUX_PKG_SRCDIR/rish_shizuku.dex" "$TERMUX_PREFIX/share/afake-su/rish_shizuku.dex"
+    
+    # 5. afake-su 启动脚本（可执行，放到 bin 目录）
+    install -Dm700 "$TERMUX_PKG_SRCDIR/afake-su" "$TERMUX_PREFIX/bin/afake-su"
 }
